@@ -1,12 +1,7 @@
-from functools import wraps
+from telethon.events import NewMessage, CallbackQuery
 from typing import Callable
-
-from telethon.events import CallbackQuery, NewMessage
-from telethon.tl.custom import Message
-
+from functools import wraps
 from bot.config import Telegram
-from bot.modules.static import *
-
 
 def verify_user(private: bool = False):
     def decorator(func: Callable):
