@@ -7,11 +7,9 @@
 
 import os
 import asyncio
-# from pyrogram.types import Message
 from bot import TelegramBot
 from telethon.events import NewMessage
 from telethon.tl.custom.message import Message
-# from pyrogram import Client, filters
 from telethon.errors import FloodWaitError
 from bot.db.support import users_info
 from bot.db.sql import add_user, query_msg

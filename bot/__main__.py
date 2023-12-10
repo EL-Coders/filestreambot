@@ -3,6 +3,9 @@ from pathlib import Path
 from bot import TelegramBot, logger
 from bot.config import Telegram
 from bot.server import server
+from bot.utils import ping
+import asyncio
+
 
 def load_plugins():
     count = 0
@@ -11,9 +14,11 @@ def load_plugins():
         count += 1
     logger.info(f'Loaded {count} {"plugins" if count > 1 else "plugin"}.')
 
+
 if __name__ == '__main__':
     logger.info('initializing...')
     TelegramBot.loop.create_task(server.serve())
+    TelegramBot.loop.create_task(ping.ping_server())
     TelegramBot.start(bot_token=Telegram.BOT_TOKEN)
     logger.info('Telegram client is now started.')
     logger.info('Loading bot plugins...')
