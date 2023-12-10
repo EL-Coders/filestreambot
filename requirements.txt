@@ -2,3 +2,6 @@ telethon
 cryptg
 quart
 uvicorn
+sqlalchemy
+psycopg2-binary
+python-dotenv

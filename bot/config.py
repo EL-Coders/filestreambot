@@ -1,4 +1,7 @@
 from os import environ as env
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Telegram:
     API_ID = int(env.get("TELEGRAM_API_ID", 1234))
@@ -14,6 +17,9 @@ class Server:
     BASE_URL = env.get("BASE_URL", "http://127.0.0.1:8080")
     BIND_ADDRESS = env.get("BIND_ADDRESS", "0.0.0.0")
     PORT = int(env.get("PORT", 8080))
+    
+class DB:
+    DB_URL = env.get("DB_URL", "postgresql://uname:pass@locahost:5432/dbname")
 
 # LOGGING CONFIGURATION
 LOGGER_CONFIG_JSON = {

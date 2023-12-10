@@ -2,10 +2,6 @@ WelcomeText = \
 """
 Hi **%(first_name)s**, send me a file to instantly generate file links.
 
-- /start to get this message.
-- /info to get user info.
-- /log to get bot logs. (admin only!)
-
 Join @elupdates for updates.
 """
 
