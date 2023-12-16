@@ -8,7 +8,7 @@
 import os
 import threading
 from sqlalchemy import create_engine
-from sqlalchemy import Column, TEXT, Numeric
+from sqlalchemy import Column, TEXT, BigInteger
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from bot.config import DB
@@ -30,7 +30,7 @@ INSERTION_LOCK = threading.RLock()
 
 class Broadcast(BASE):
     __tablename__ = "broadcast"
-    id = Column(Numeric, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
     user_name = Column(TEXT)
 
     def __init__(self, id, user_name):
