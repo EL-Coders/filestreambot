@@ -1,56 +1,65 @@
-#  !/usr/bin/env python3
-#  -*- coding: utf-8 -*-
-#  Name     : broadcast-bot [ Telegram ]
-#  Repo     : https://github.com/m4mallu/broadcast-bot
-#  Author   : Renjith Mangal [ https://t.me/space4renjith ]
-#  Licence  : GPL-3
-
-import os
 import asyncio
-from bot import TelegramBot
+import time
+import datetime
+
+from telethon.errors import FloodWaitError
 from telethon.events import NewMessage
 from telethon.tl.custom.message import Message
-from telethon.errors import FloodWaitError
-from bot.db.support import users_info
-from bot.db.sql import add_user, query_msg
+
+from bot import TelegramBot
 from bot.config import Telegram
+from bot.db.sql import query_msg
+from bot.db.support import users_info
 
 
-# ------------------------------- View Subscribers --------------------------------- #
-@TelegramBot.on(NewMessage(incoming=True, pattern=r'^/stats$'))
+@TelegramBot.on(NewMessage(incoming=True, pattern=r"^/stats$"))
 async def subscribers_count(event: NewMessage.Event | Message):
-    id = str(event.sender_id)
-    if id not in str(Telegram.OWNER_ID):
+    user_id = str(event.sender_id)
+    if user_id not in str(Telegram.OWNER_ID):
         return
-    WAIT_MSG = "**Please Wait...**"
-    msg = await event.reply(WAIT_MSG)
-    messages = await users_info()
-    active = messages[0]
-    blocked = messages[1]
-    # await m.delete()
-    USERS_LIST = "**Total:**\n\nSubscribers - {}\nBlocked / Deleted - {}"
-    await msg.edit(USERS_LIST.format(active, blocked))
+    wait_msg = "__Calculating, please wait...__"
+    msg = await event.reply(wait_msg)
+    active, blocked = await users_info()
+    stats_msg = f"**Stats**\nActive: `{active}`\nBlocked / Deleted: `{blocked}`"
+    await msg.edit(stats_msg)
 
 
-# ------------------------ Send messages to subs ----------------------------- #
-@TelegramBot.on(NewMessage(incoming=True, pattern=r'^/broadcast$'))
+@TelegramBot.on(NewMessage(incoming=True, pattern=r"^/broadcast$"))
 async def send_text(event: NewMessage.Event | Message):
-    id = str(event.sender_id)
-    if id not in str(Telegram.OWNER_ID):
+    user_id = str(event.sender_id)
+    if user_id not in str(Telegram.OWNER_ID):
         return
-    if (" " not in event.text) and ("broadcast" in event.text) and (event.message.reply_to is not None):       
+
+    if (
+        (" " not in event.text)
+        and ("broadcast" in event.text)
+        and (event.message.reply_to is not None)
+    ):
+        start_time = time.time()
+        success = 0
+        failed = 0
         query = await query_msg()
         msg = await event.get_reply_message()
         for row in query:
             chat_id = int(row[0])
             try:
-                await TelegramBot.send_message(chat_id,msg)
+                await TelegramBot.send_message(chat_id, msg)
+                success += 1
             except FloodWaitError as e:
-                await asyncio.sleep(e.x)
+                print("Floodwait while broadcasting, sleeping for %s", e.seconds)
+                await asyncio.sleep(e.seconds)
+                failed += 1
             except Exception as e:
-                pass
+                failed += 1
+        time_taken = datetime.timedelta(seconds=int(time.time() - start_time))
+        await event.reply(
+            f"**Broadcast Completed**\nSent to: `{success}`\nFailed: `{failed}`\nCompleted in `{time_taken}` hh:mm:ss"
+        )
+
     else:
-        REPLY_ERROR = "`Use this command as a reply to any telegram message with out any spaces.`"
-        msg = await event.reply(REPLY_ERROR)
+        reply_error = (
+            "`Use this command as a reply to any telegram message without any spaces.`"
+        )
+        msg = await event.reply(reply_error)
         await asyncio.sleep(8)
         await msg.delete()

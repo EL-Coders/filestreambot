@@ -1,12 +1,15 @@
-from telethon.events import NewMessage, CallbackQuery
-from telethon.tl.custom import Message
-from typing import Callable
 from functools import wraps
+from typing import Callable
+
+from telethon.events import CallbackQuery, NewMessage
+from telethon.tl.custom import Message
+
 from bot.config import Telegram
 from bot.modules.static import *
 
+
 def verify_user(private: bool = False):
-    
+
     def decorator(func: Callable):
         @wraps(func)
         async def wrapper(update: NewMessage.Event | CallbackQuery.Event):
@@ -19,4 +22,5 @@ def verify_user(private: bool = False):
                 return await func(update)
 
         return wrapper
+
     return decorator
