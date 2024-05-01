@@ -1,7 +1,9 @@
 import asyncio
-import aiohttp
-from bot.config import Util, Server 
 from logging import getLogger
+
+import aiohttp
+
+from bot.config import Server, Util
 
 logger = getLogger("ping")
 
@@ -20,3 +22,4 @@ async def ping_server():
             logger.warning("Couldn't connect to the site URL..")
         except Exception:
             logger.error("Unexpected error: ", exc_info=True)
+            
