@@ -1,53 +1,71 @@
-import os
 import threading
 from sqlalchemy import create_engine
 from sqlalchemy import Column, TEXT, BigInteger
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.pool import StaticPool
 from bot.config import DB
 
 
+BASE = declarative_base()
+
+
+class Broadcast(BASE):
+    __tablename__ = "broadcast"
+    user_id = Column(BigInteger, primary_key=True)
+    user_name = Column(TEXT)
+
+    def __init__(self, user_id, user_name):
+        self.user_id = user_id
+        self.user_name = user_name
+
+
 def start() -> scoped_session:
-    engine = create_engine(DB.DB_URL, client_encoding="utf8")
+    engine = create_engine(
+        DB.DB_URL, client_encoding="utf8", poolclass=StaticPool)
     BASE.metadata.bind = engine
     BASE.metadata.create_all(engine)
     return scoped_session(sessionmaker(bind=engine, autoflush=False))
 
 
-BASE = declarative_base()
 SESSION = start()
-
 INSERTION_LOCK = threading.RLock()
 
 
-class Broadcast(BASE):
-    __tablename__ = "broadcast"
-    id = Column(BigInteger, primary_key=True)
-    user_name = Column(TEXT)
-
-    def __init__(self, id, user_name):
-        self.id = id
-        self.user_name = user_name
-
-
-engine = create_engine(DB.DB_URL, client_encoding="utf8")
-Broadcast.__table__.create(bind=engine, checkfirst=True)
-
-
-async def add_user(id, user_name):
+async def add_user(user_id, user_name):
     with INSERTION_LOCK:
-        msg = SESSION.query(Broadcast).get(id)
-        if not msg:
-            usr = Broadcast(id, user_name)
+        try:
+            usr = SESSION.query(Broadcast).filter_by(user_id=user_id).one()
+        except NoResultFound:
+            usr = Broadcast(user_id=user_id, user_name=user_name)
             SESSION.add(usr)
             SESSION.commit()
-        else:
-            pass
+
+
+async def is_user(user_id):
+    with INSERTION_LOCK:
+        try:
+            usr = SESSION.query(Broadcast).filter_by(user_id=user_id).one()
+            return usr.user_id
+        except NoResultFound:
+            return False
 
 
 async def query_msg():
     try:
-        query = SESSION.query(Broadcast.id).order_by(Broadcast.id)
-        return query
+        query = SESSION.query(Broadcast.user_id).order_by(Broadcast.user_id)
+        return query.all()
     finally:
         SESSION.close()
+
+
+async def del_user(user_id):
+    with INSERTION_LOCK:
+        try:
+            usr = SESSION.query(Broadcast).filter_by(user_id=user_id[0]).one()
+            SESSION.delete(usr)
+            SESSION.commit()
+        except NoResultFound:
+            pass
+        

@@ -1,8 +1,7 @@
 import asyncio
-from bot.db.sql import query_msg
 from telethon.errors import FloodWaitError
-from telethon import events
-from bot import TelegramBot
+from bot import TelegramBot, logger
+from bot.db.sql import del_user, query_msg
 
 
 async def users_info():
@@ -13,13 +12,16 @@ async def users_info():
     for user_id in identity:
         typing_successful = False
         try:
-            async with TelegramBot.action(int(user_id[0]), 'typing'):
+            async with TelegramBot.action(int(user_id[0]), "typing"):
                 await asyncio.sleep(0.1)
                 typing_successful = True
         except FloodWaitError as e:
+            logger.info("Floodwait while broadcast, sleeping %s", user_id)
             await asyncio.sleep(e.seconds)
-        except Exception as e:
+        except Exception:
             typing_successful = False
+            await del_user(user_id)
+            logger.info("Deleted user id %s from broadcast list", user_id)
 
         if typing_successful:
             active += 1

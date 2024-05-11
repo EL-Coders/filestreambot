@@ -1,7 +1,7 @@
-from telethon import TelegramClient
 from logging import getLogger
 from logging.config import dictConfig
-from .config import Telegram, LOGGER_CONFIG_JSON
+from telethon import TelegramClient
+from .config import LOGGER_CONFIG_JSON, Telegram
 
 dictConfig(LOGGER_CONFIG_JSON)
 
