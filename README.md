@@ -1,7 +1,7 @@
 <div align="center"><h1>🌐File Stream Bot</h1>
 <b>An open-source Python Telegram bot to transmit Telegram files over HTTP.</b>
 
-<a href="https://t.me/DrFileStreamBot"><b>Demo Bot</b></a>
+<a href="https://t.me/FileToLinkELBot"><b>Demo Bot</b></a>
 </div><br>
 
 ## **📑 INDEX**
@@ -48,13 +48,13 @@ pkg install git -y
 
 **2.Download repository:**
 ```
-git clone https://github.com/TheCaduceus/FileStreamBot.git
+git clone https://github.com/EL-Coders/filestreambot
 ```
 
 **3.Change Directory:**
 
 ```
-cd FileStreamBot
+cd filestreambot
 ```
 
 <a name="i-3"></a>
@@ -68,10 +68,10 @@ pip install -r requirements.txt
 <a name="variables"></a>
 
 ## 📝 Variables
-**The variables provided below should either be completed within the [config.py](https://github.com/TheCaduceus/FileStreamBot/blob/main/bot/config.py) file or configured as environment variables.**
+**The variables provided below should either be completed within the [config.py](https://github.com/EL-Coders/filestreambot/blob/main/bot/config.py) file or configured as environment variables.**
 * `API_ID`|`TELEGRAM_API_ID`: API ID of your Telegram account, can be obtained from [My Telegram](https://my.telegram.org). `int`
 * `API_HASH`|`TELEGRAM_API_HASH`: API hash of your Telegram account, can be obtained from [My Telegram](https://my.telegram.org). `str`
-* `OWNER_ID`: ID of your Telegram account, can be obtained by sending **/info** to [@DrFileStreamBot](https://t.me/DrFileStreamBot). `int`
+* `OWNER_ID`: ID of your Telegram account, can be obtained by sending **/info** to [@DrFileStreamBot](https://t.me/FileToLinkELBot). `int`
 * `ALLOWED_USER_IDS`: A list of Telegram account IDs (separated by spaces) that are permitted to use the bot. Leave this field empty to allow anyone to use it. `str`
 * `BOT_USERNAME`|`TELEGRAM_BOT_USERNAME`: Username of your Telegram bot, create one using [@BotFather](https://t.me/BotFather). `str`
 * `BOT_TOKEN`|`TELEGRAM_BOT_TOKEN`: Telegram API token of your bot, can be obtained from [@BotFather](https://t.me/BotFather). `str`
@@ -81,6 +81,36 @@ pip install -r requirements.txt
 * `BASE_URL`: Base URL that bot should use while generating file links, can be FQDN and by default to `127.0.0.1`. `str`
 * `BIND_ADDRESS`: Bind address for web server, by default to `0.0.0.0` to run on all possible addresses. `str`
 * `PORT`: Port for web server to run on, by default to `8080`. `int`
+
+
+## SQL Database Setup
+
+```bash
+# Install postgresql:
+sudo apt-get update && sudo apt-get install postgresql
+
+# Change to the postgres user:
+sudo su - postgres
+
+# Create a new database user (change YOUR_USER appropriately):
+createuser -P -s -e YOUR_USER
+# This will be followed by you needing to input your password.
+
+# create a new database table:
+createdb -O YOUR_USER YOUR_DB_NAME
+#Change YOUR_USER and YOUR_DB_NAME appropriately.
+
+# finally:
+psql -h YOUR_HOST -p YOUR_PORT -d YOUR_DB_NAME -U YOUR_USER
+
+#This will allow you to connect to your database via your terminal.
+By default, YOUR_HOST should be `localhost` & YOUR_PORT should be `5432`.
+
+You should now be able to build your database URI. This will be:
+sqldbtype://username:password@hostname:port/db_name
+
+Replace your sqldbtype, username, password, hostname (localhost?), port (5432?), and db name in .env file.
+```
 
 ## 🕹 Deployment
 
@@ -106,7 +136,7 @@ docker run -p 8080:8080 file-stream-bot
 <a name="help"></a>
 
 ## ⛑️ Need help!
-- Ask questions or doubts [here](https://t.me/DrDiscussion).
+- Ask questions or doubts [here](https://t.me/ELSupport).
 
 <a name="credits"></a>
 

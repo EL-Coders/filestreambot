@@ -7,6 +7,7 @@ from bot.config import Server, Util
 
 logger = getLogger("ping")
 
+
 async def ping_server():
     sleep_time = Util.PING_INTERVAL
     logger.info("Started with {}s interval between pings".format(sleep_time))
@@ -22,4 +23,3 @@ async def ping_server():
             logger.warning("Couldn't connect to the site URL..")
         except Exception:
             logger.error("Unexpected error: ", exc_info=True)
-            

@@ -26,6 +26,14 @@ async def welcome(event: NewMessage.Event | Message):
     )
 
 
+@TelegramBot.on(NewMessage(incoming=True, pattern=r"^/help$"))
+@verify_user(private=True)
+async def help_text(event: NewMessage.Event | Message):
+    await event.reply(
+        message=HelpText,
+    )
+
+
 @TelegramBot.on(NewMessage(incoming=True, pattern=r"^/info$"))
 @verify_user(private=True)
 async def user_info(event: Message):

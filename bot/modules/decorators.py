@@ -9,7 +9,6 @@ from bot.modules.static import *
 
 
 def verify_user(private: bool = False):
-
     def decorator(func: Callable):
         @wraps(func)
         async def wrapper(update: NewMessage.Event | CallbackQuery.Event):

@@ -40,4 +40,3 @@ async def unbanuser(event: NewMessage.Event | Message):
             await event.reply(f"User {user_id} is not in ban list")
     else:
         await event.reply("Please send in proper format `/unban user_id`")
-

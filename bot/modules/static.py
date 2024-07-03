@@ -1,12 +1,21 @@
-WelcomeText = \
-"""
+WelcomeText = """
 Hi **%(first_name)s**, send me a file to instantly generate file links.
 
 Join @elupdates for updates.
 """
 
-UserInfoText = \
+HelpText = """
+/start - Start
+/help - Help
+/info - User Info
+/logs - Logs
+/stats - User Count
+/ban - Ban User
+/unban - Unban User
+/broadcast - Reply to a message to broadcast
 """
+
+UserInfoText = """
 **First Name:**
 `{sender.first_name}`
 
@@ -20,16 +29,14 @@ UserInfoText = \
 `@{sender.username}`
 """
 
-FileLinksText = \
-"""
+FileLinksText = """
 **Download Link:**
 `%(dl_link)s`
 **Telegram File:**
 `%(tg_link)s`
 """
 
-MediaLinksText = \
-"""
+MediaLinksText = """
 **Download Link:**
 `%(dl_link)s`
 **Stream Link:**
@@ -38,27 +45,22 @@ MediaLinksText = \
 `%(tg_link)s`
 """
 
-InvalidQueryText = \
-"""
+InvalidQueryText = """
 Query data mismatched.
 """
 
-MessageNotExist = \
-"""
+MessageNotExist = """
 File revoked or not exist.
 """
 
-LinkRevokedText = \
-"""
+LinkRevokedText = """
 The link has been revoked. It may take some time for the changes to take effect.
 """
 
-InvalidPayloadText = \
-"""
+InvalidPayloadText = """
 Invalid payload.
 """
 
-MediaTypeNotSupportedText = \
-"""
+MediaTypeNotSupportedText = """
 Sorry, this media type is not supported.
 """
