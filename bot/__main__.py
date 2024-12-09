@@ -3,7 +3,7 @@ from pathlib import Path
 from bot import TelegramBot, logger
 from bot.config import Telegram
 from bot.server import server
-from bot.utils import ping
+from bot.utils import ping, restart
 import asyncio
 
 
@@ -19,6 +19,7 @@ if __name__ == "__main__":
     logger.info("initializing...")
     TelegramBot.loop.create_task(server.serve())
     TelegramBot.loop.create_task(ping.ping_server())
+    TelegramBot.loop.create_task(restart.restart_bot())
     TelegramBot.start(bot_token=Telegram.BOT_TOKEN)
     logger.info("Telegram client is now started.")
     logger.info("Loading bot plugins...")
