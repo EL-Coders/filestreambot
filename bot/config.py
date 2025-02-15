@@ -27,6 +27,7 @@ class DB:
 
 class Util:
     PING_INTERVAL = int(env.get("PING_INTERVAL ", 1200))  # 20 minutes
+    RSTRT_INTERVAL = int(env.get("RSTRT_INTERVAL ", 3600))  # 20 minutes
     SUB_CHANNEL = int(env.get("SUB_CHANNEL", 0))
     SUB_CHANNEL_LINK = env.get("SUB_CHANNEL_LINK", "t.me/elupdates")
 
