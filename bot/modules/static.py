@@ -1,6 +1,8 @@
 WelcomeText = """
 Hi **%(first_name)s**, send me a file to instantly generate file links.
 
+>Links have 3 hrs validity
+
 Join @elupdates for updates.
 """
 
@@ -29,20 +31,30 @@ UserInfoText = """
 `@{sender.username}`
 """
 
+# FileLinksText = """
+# **Download Link:**
+# `%(dl_link)s`
+# **Telegram File:**
+# `%(tg_link)s`
+# """
+
 FileLinksText = """
 **Download Link:**
 `%(dl_link)s`
-**Telegram File:**
-`%(tg_link)s`
 """
+
+# MediaLinksText = """
+# **Download Link:**
+# `%(dl_link)s`
+# **Stream Link:**
+# `%(stream_link)s`
+# **Telegram File:**
+# `%(tg_link)s`
+# """
 
 MediaLinksText = """
 **Download Link:**
 `%(dl_link)s`
-**Stream Link:**
-`%(stream_link)s`
-**Telegram File:**
-`%(tg_link)s`
 """
 
 InvalidQueryText = """

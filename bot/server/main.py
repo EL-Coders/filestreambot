@@ -83,17 +83,17 @@ async def transmit_file(file_id):
     )
 
 
-@bp.route("/stream/<int:file_id>")
-async def stream_file(file_id):
-    code = request.args.get("code") or abort(401)
+# @bp.route("/stream/<int:file_id>")
+# async def stream_file(file_id):
+#     code = request.args.get("code") or abort(401)
 
-    return await render_template(
-        "player.html", mediaLink=f"{Server.BASE_URL}/dl/{file_id}?code={code}"
-    )
+#     return await render_template(
+#         "player.html", mediaLink=f"{Server.BASE_URL}/dl/{file_id}?code={code}"
+#     )
 
 
-@bp.route("/file/<int:file_id>")
-async def file_deeplink(file_id):
-    code = request.args.get("code") or abort(401)
+# @bp.route("/file/<int:file_id>")
+# async def file_deeplink(file_id):
+#     code = request.args.get("code") or abort(401)
 
-    return redirect(f"https://t.me/{Telegram.BOT_USERNAME}?start=file_{file_id}_{code}")
+#     return redirect(f"https://t.me/{Telegram.BOT_USERNAME}?start=file_{file_id}_{code}")
