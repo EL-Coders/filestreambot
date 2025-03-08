@@ -26,11 +26,11 @@ logger = getLogger("fileserve")
 async def user_file_handler(event: NewMessage.Event | Message):
     user_id = event.sender_id
     secret_code = token_hex(Telegram.SECRET_CODE_LENGTH)
-    event.message.text = f"`{secret_code}`"
+    event.message.text = f"`{secret_code}`-`{user_id}`"
     message = await send_message(event.message)
-    await TelegramBot.send_message(
-        entity=Telegram.CHANNEL_ID, message=f"User ID: `{user_id}`", send_as=Telegram.CHANNEL_ID
-    )
+    # await TelegramBot.send_message(
+    #     entity=Telegram.CHANNEL_ID, message=f"User ID: `{user_id}`", send_as=Telegram.CHANNEL_ID
+    # )
     message_id = message.id
 
     if await is_banned(user_id):
@@ -62,8 +62,8 @@ async def user_file_handler(event: NewMessage.Event | Message):
             )
             return
 
-    dl_link = f"{Server.BASE_URL}/dl/{message_id}?code={secret_code}"
-    tg_link = f"{Server.BASE_URL}/file/{message_id}?code={secret_code}"
+    dl_link = f"{Server.BASE_URL}/dl/{message_id}?code={secret_code}-{user_id}"
+    tg_link = f"{Server.BASE_URL}/file/{message_id}?code={secret_code}-{user_id}"
     # deep_link = (
     #     f"https://t.me/{Telegram.BOT_USERNAME}?start=file_{message_id}_{secret_code}"
     # )
