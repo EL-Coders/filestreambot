@@ -22,7 +22,7 @@ async def get_message(message_id: int) -> Message | None:
 
 async def send_message(message: Message, send_to: int = Telegram.CHANNEL_ID) -> Message:
     message.forward
-    return await TelegramBot.send_message(entity=send_to, message=message)
+    return await TelegramBot.send_message(entity=send_to, message=message, send_as=send_to)
 
 
 def filter_files(update: NewMessage.Event | Message):

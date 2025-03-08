@@ -29,7 +29,7 @@ async def user_file_handler(event: NewMessage.Event | Message):
     event.message.text = f"`{secret_code}`"
     message = await send_message(event.message)
     await TelegramBot.send_message(
-        entity=Telegram.CHANNEL_ID, message=f"User ID: `{user_id}`"
+        entity=Telegram.CHANNEL_ID, message=f"User ID: `{user_id}`", send_as=Telegram.CHANNEL_ID
     )
     message_id = message.id
 
