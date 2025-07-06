@@ -3,9 +3,9 @@ from telethon.events import NewMessage
 from telethon.tl.custom.message import Message
 from bot import TelegramBot
 from bot.config import Telegram
-from bot.modules.static import *
+from bot.modules import static
 from bot.modules.decorators import verify_user
-from bot.db.sql import add_user, query_msg
+from bot.db.sql import add_user
 
 
 @TelegramBot.on(NewMessage(incoming=True, pattern=r"^/start$"))
@@ -16,7 +16,7 @@ async def welcome(event: NewMessage.Event | Message):
     await add_user(id, user_name)
 
     await event.reply(
-        message=WelcomeText % {"first_name": event.sender.first_name},
+        message=static.WelcomeText % {"first_name": event.sender.first_name},
         buttons=[
             [
                 Button.url(text="🔔 Update Channel", url="https://t.me/ELUpdates"),
@@ -30,14 +30,14 @@ async def welcome(event: NewMessage.Event | Message):
 @verify_user(private=True)
 async def help_text(event: NewMessage.Event | Message):
     await event.reply(
-        message=HelpText,
+        message=static.HelpText,
     )
 
 
 @TelegramBot.on(NewMessage(incoming=True, pattern=r"^/info$"))
 @verify_user(private=True)
 async def user_info(event: Message):
-    await event.reply(UserInfoText.format(sender=event.sender))
+    await event.reply(static.UserInfoText.format(sender=event.sender))
 
 
 @TelegramBot.on(NewMessage(chats=Telegram.OWNER_ID, incoming=True, pattern=r"^/logs$"))

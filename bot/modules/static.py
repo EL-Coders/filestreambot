@@ -1,9 +1,9 @@
 WelcomeText = """
 Hi **%(first_name)s**, send me a file to instantly generate file links.
 
->Links have 3 hrs validity
+__Links have only 3 hrs validity__
 
-Join @elupdates for updates.
+Join @ELUpdates for updates & more bots.
 """
 
 HelpText = """

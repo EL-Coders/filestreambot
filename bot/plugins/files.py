@@ -1,5 +1,6 @@
 from logging import getLogger
 from secrets import token_hex
+from random import choice
 
 from telethon import Button
 from telethon.errors import (
@@ -14,11 +15,25 @@ from telethon.tl.custom import Message
 from bot import TelegramBot
 from bot.config import Server, Telegram, Util
 from bot.modules.decorators import verify_user
-from bot.modules.static import *
+from bot.modules import static
 from bot.modules.telegram import filter_files, send_message
 from bot.db.ban_sql import is_banned
 
 logger = getLogger("fileserve")
+
+
+def get_WORKERS_URL(message_id: int, secret_code: str, user_id: int) -> list[str]:
+    WORKERS_URLs = []
+    if Server.WORKERS_URL:
+        url1 = f"{Server.WORKERS_URL}/dl/{message_id}?code={secret_code}-{user_id}"
+        WORKERS_URLs.append(url1)
+    if Server.WORKERS_URL_2:
+        url2 = f"{Server.WORKERS_URL_2}/dl/{message_id}?code={secret_code}-{user_id}"
+        WORKERS_URLs.append(url2)
+    if Server.WORKERS_URL_3:
+        url3 = f"{Server.WORKERS_URL_3}/dl/{message_id}?code={secret_code}-{user_id}"
+        WORKERS_URLs.append(url3)
+    return WORKERS_URLs
 
 
 @TelegramBot.on(NewMessage(incoming=True, func=filter_files))
@@ -62,8 +77,12 @@ async def user_file_handler(event: NewMessage.Event | Message):
             )
             return
 
+    WORKERS_URLs = get_WORKERS_URL(message_id, secret_code, user_id)
     dl_link = f"{Server.BASE_URL}/dl/{message_id}?code={secret_code}-{user_id}"
-    tg_link = f"{Server.BASE_URL}/file/{message_id}?code={secret_code}-{user_id}"
+    # tg_link = f"{Server.BASE_URL}/file/{message_id}?code={secret_code}-{user_id}"
+    if WORKERS_URLs:
+        wr_link = choice(WORKERS_URLs)
+
     # deep_link = (
     #     f"https://t.me/{Telegram.BOT_USERNAME}?start=file_{message_id}_{secret_code}"
     # )
@@ -85,14 +104,24 @@ async def user_file_handler(event: NewMessage.Event | Message):
     #         ],
     #     )
     # else:
-    await event.reply(
-        message=FileLinksText % {"dl_link": dl_link, "tg_link": tg_link},
-        buttons=[
+    kb = [
             [
                 Button.url("Download", dl_link),
             ],
-            [Button.inline("Revoke", f"rm_{message_id}_{secret_code}")],
-        ],
+            
+        ]
+    if WORKERS_URLs:
+        kb.append([Button.url("Fast Download", wr_link)])
+        mess = f"**Download Links:**\n\n**Download Link:** `{dl_link}`\n**Fast Download Link:** `{wr_link}`\n\n__You can copy paste the link in any streaming supported media player & stream__"
+    else:
+        mess = f"**Download Links:**\n\n**Download Link:** `{dl_link}`\n\n__You can copy paste the link in any streaming supported media player & stream__"
+        
+    kb.append([Button.inline("Revoke", f"rm_{message_id}_{secret_code}")])
+    
+        
+    await event.reply(
+        message=mess,
+        buttons=kb,
     )
 
 

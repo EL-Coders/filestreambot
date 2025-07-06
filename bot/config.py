@@ -19,6 +19,9 @@ class Server:
     BASE_URL = env.get("BASE_URL", "http://127.0.0.1:8080")
     BIND_ADDRESS = env.get("BIND_ADDRESS", "0.0.0.0")
     PORT = int(env.get("PORT", 8080))
+    WORKERS_URL = env.get("WORKERS_URL", "")
+    WORKERS_URL_2 = env.get("WORKERS_URL_2", "")
+    WORKERS_URL_3 = env.get("WORKERS_URL_3", "")
 
 
 class DB:

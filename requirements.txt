@@ -1,5 +1,5 @@
-# telethon
-https://github.com/LonamiWebs/Telethon/archive/859f7423f231f4965bdf8685db00c3a24e333ceb.zip
+telethon
+# https://github.com/LonamiWebs/Telethon/archive/859f7423f231f4965bdf8685db00c3a24e333ceb.zip
 cryptg
 quart
 uvicorn
