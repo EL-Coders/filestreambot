@@ -16,9 +16,9 @@ async def banuser(event: NewMessage.Event | Message):
         banned = await is_banned(int(user_id))
         if not banned:
             await ban_user(int(user_id))
-            await event.reply(f"User {user_id} banned")
+            await event.reply(f"User {user_id} banned.")
         else:
-            await event.reply(f"User {user_id} is already banned")
+            await event.reply(f"User {user_id} is already banned.")
 
     else:
         await event.reply("Please send in proper format `/ban user_id`")
@@ -35,8 +35,8 @@ async def unbanuser(event: NewMessage.Event | Message):
         banned = await is_banned(int(user_id))
         if banned:
             await unban_user(int(user_id))
-            await event.reply(f"User {user_id} unbanned")
+            await event.reply(f"User {user_id} unbanned.")
         else:
-            await event.reply(f"User {user_id} is not in ban list")
+            await event.reply(f"User {user_id} is not in ban list.")
     else:
         await event.reply("Please send in proper format `/unban user_id`")

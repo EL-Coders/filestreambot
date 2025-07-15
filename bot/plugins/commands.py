@@ -1,3 +1,6 @@
+import os
+import sys
+import asyncio
 from telethon import Button
 from telethon.events import NewMessage
 from telethon.tl.custom.message import Message
@@ -42,4 +45,14 @@ async def user_info(event: Message):
 
 @TelegramBot.on(NewMessage(chats=Telegram.OWNER_ID, incoming=True, pattern=r"^/logs$"))
 async def send_log(event: NewMessage.Event | Message):
+    mess = await event.reply("Sending logs...")
     await event.reply(file="event-log.txt")
+    await mess.delete()
+
+
+@TelegramBot.on(NewMessage(incoming=True, pattern=r"^/restart$"))
+async def restart(event: NewMessage.Event | Message):
+    mess = await event.reply("Restarting...")
+    await asyncio.sleep(2)
+    await mess.edit("Restart completed.. initializing...")
+    os.execv(sys.executable, ["python3", "-m", "bot"] + sys.argv)

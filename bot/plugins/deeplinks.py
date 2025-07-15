@@ -3,7 +3,7 @@ from telethon.tl.custom import Message
 from bot import TelegramBot
 from bot.modules.decorators import verify_user
 from bot.modules.telegram import get_message, send_message
-from bot.modules.static import *
+from bot.modules.static import InvalidPayloadText, MessageNotExist
 
 
 @TelegramBot.on(NewMessage(incoming=True, pattern=r"^/start file_"))

@@ -1,7 +1,7 @@
 from telethon.events import CallbackQuery
 from bot import TelegramBot
 from bot.modules.decorators import verify_user
-from bot.modules.static import *
+from bot.modules.static import InvalidQueryText, MessageNotExist, LinkRevokedText
 from bot.modules.telegram import get_message
 
 

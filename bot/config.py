@@ -10,9 +10,26 @@ class Telegram:
     OWNER_ID = int(env.get("OWNER_ID", 20516707))
     ALLOWED_USER_IDS = env.get("ALLOWED_USER_IDS", "").split()
     BOT_USERNAME = env.get("TELEGRAM_BOT_USERNAME", "InstantLinkELBot")
-    BOT_TOKEN = env.get("TELEGRAM_BOT_TOKEN", "1234:abcd")
+    BOT_TOKEN = env.get("TELEGRAM_BOT_TOKEN", "")
     CHANNEL_ID = int(env.get("TELEGRAM_CHANNEL_ID", -1001979167499))
     SECRET_CODE_LENGTH = int(env.get("SECRET_CODE_LENGTH", 12))
+
+    @staticmethod
+    def get_bot_tokens():
+        tokens = []
+        if Telegram.BOT_TOKEN:
+            tokens.append(Telegram.BOT_TOKEN)
+        else:
+            raise ValueError("TELEGRAM_BOT_TOKEN is not set")
+        count = 1
+        while True:
+            token = env.get(f"TELEGRAM_BOT_TOKEN_{count}")
+            if token:
+                tokens.append(token)
+                count += 1
+            else:
+                break
+        return tokens
 
 
 class Server:
@@ -29,8 +46,8 @@ class DB:
 
 
 class Util:
-    PING_INTERVAL = int(env.get("PING_INTERVAL ", 1200))  # 20 minutes
-    RSTRT_INTERVAL = int(env.get("RSTRT_INTERVAL ", 3600))  # 20 minutes
+    PING_INTERVAL = int(env.get("PING_INTERVAL", 1200))  # 20 minutes
+    RSTRT_INTERVAL = int(env.get("RSTRT_INTERVAL", 3600))  # 60 minutes
     SUB_CHANNEL = int(env.get("SUB_CHANNEL", 0))
     SUB_CHANNEL_LINK = env.get("SUB_CHANNEL_LINK", "t.me/elupdates")
 
@@ -60,5 +77,6 @@ LOGGER_CONFIG_JSON = {
         },
         "bot": {"level": "INFO", "handlers": ["file_handler", "stream_handler"]},
         "ping": {"level": "INFO", "handlers": ["file_handler", "stream_handler"]},
+        "restarter": {"level": "INFO", "handlers": ["file_handler", "stream_handler"]},
     },
 }

@@ -13,7 +13,7 @@ instance.config["RESPONSE_TIMEOUT"] = None
 @instance.before_serving
 async def before_serve():
     logger.info("Web server is started!")
-    logger.info(f"Server running on {Server.BIND_ADDRESS}:{Server.PORT}")
+    logger.info("Server running on %s:%s", Server.BIND_ADDRESS, Server.PORT)
 
 
 instance.register_blueprint(main.bp)
