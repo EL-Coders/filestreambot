@@ -18,6 +18,7 @@ from bot.modules.decorators import verify_user
 from bot.modules import static
 from bot.modules.telegram import filter_files, send_message
 from bot.db.ban_sql import is_banned
+from bot.db.stats_sql import add_file_size
 
 logger = getLogger("fileserve")
 
@@ -43,10 +44,19 @@ async def user_file_handler(event: NewMessage.Event | Message):
     secret_code = token_hex(Telegram.SECRET_CODE_LENGTH)
     event.message.text = f"`{secret_code}`-`{user_id}`"
     message = await send_message(event.message)
-    # await TelegramBot.send_message(
-    #     entity=Telegram.CHANNEL_ID, message=f"User ID: `{user_id}`", send_as=Telegram.CHANNEL_ID
-    # )
     message_id = message.id
+
+    try:
+        file_size = 0
+        if hasattr(event.message, 'file') and event.message.file:
+            file_size = event.message.file.size or 0
+        if file_size > 0:
+            await add_file_size(file_size)
+            logger.info("File size tracked: %s bytes for user %s", file_size, user_id)
+        else:
+            logger.warning("Could not determine file size for user %s", user_id)
+    except Exception as e:
+        logger.error("Error tracking file size: %s", e)
 
     if await is_banned(user_id):
         await event.reply("You are banned. You can't use this bot.")
@@ -106,17 +116,17 @@ async def user_file_handler(event: NewMessage.Event | Message):
     # else:
     kb = [
             [
-                Button.url("Download", dl_link),
+                Button.url("📩 Download", dl_link),
             ],
             
         ]
     if WORKERS_URLs:
-        kb.append([Button.url("Fast Download", wr_link)])
-        mess = f"**Download Links:**\n\n**Download Link:** `{dl_link}`\n**Fast Download Link:** `{wr_link}`\n\n__You can copy paste the link in any streaming supported media player & stream__"
+        kb.append([Button.url("🚀 Fast Download", wr_link)])
+        mess = f"**Download Links:**\n\n**📩 Download Link:** `{dl_link}`\n\n**🚀 Fast Download Link:** `{wr_link}`\n\n▸ __You can copy paste the link in any streaming supported media player & stream__\n▸ __Use normal download link if fast link is not working__\n**@ELUpdates**"
     else:
-        mess = f"**Download Links:**\n\n**Download Link:** `{dl_link}`\n\n__You can copy paste the link in any streaming supported media player & stream__"
+        mess = f"**Download Links:**\n\n**📩 Download Link:** `{dl_link}`\n\n▸ __You can copy paste the link in any streaming supported media player & stream__"
         
-    kb.append([Button.inline("Revoke", f"rm_{message_id}_{secret_code}")])
+    kb.append([Button.inline("❌ Revoke", f"rm_{message_id}_{secret_code}")])
     
         
     await event.reply(

@@ -1,15 +1,16 @@
 WelcomeText = """
-Hi **%(first_name)s**, send me a file to instantly generate file links.
+Hi **%(first_name)s**, send me a file to instantly generate direct download links.
 
 __Links have only 3 hrs validity__
 
-Join @ELUpdates for updates & more bots.
+**Join @ELUpdates for updates & more bots.**
 """
 
 HelpText = """
 /start - Start
 /help - Help
 /info - User Info
+/filestats - File Statistics
 /logs - Logs
 /stats - User Count
 /ban - Ban User
