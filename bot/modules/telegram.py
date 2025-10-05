@@ -21,7 +21,6 @@ async def get_message(message_id: int) -> Message | None:
 
 
 async def send_message(message: Message, send_to: int = Telegram.CHANNEL_ID) -> Message:
-    message.forward
     return await TelegramBot.send_message(entity=send_to, message=message, send_as=send_to)
 
 
@@ -69,3 +68,4 @@ def get_file_properties(message: Message):
         mime_type = guess_type(file_name)[0] or "application/octet-stream"
 
     return file_name, file_size, mime_type
+
